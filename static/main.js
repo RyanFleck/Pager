@@ -17,21 +17,27 @@ function enableNotifications() {
     "notificationsDisabled"
   );
 
-  return Notification.requestPermission()
-    .then(function (permission) {
-      switch (permission) {
-        case "granted":
-          console.log("Notifications enabled.");
-          break;
+  if (Notification.permission !== "granted") {
+    console.log("Requesting permission...");
+    Notification.requestPermission()
+      .then(function (permission) {
+        switch (permission) {
+          case "granted":
+            console.log("Notifications enabled.");
+            sendTestNotification();
+            break;
 
-        default:
-          console.log("Permission not granted, set to: " + permission);
-          warningNotificationsDisabled.style.display = "block";
-      }
-    })
-    .catch(function () {
-      console.log("Failed to enable notifications.");
-    });
+          default:
+            console.log("Permission not granted, set to: " + permission);
+            warningNotificationsDisabled.style.display = "block";
+        }
+      })
+      .catch(function () {
+        console.log("Failed to enable notifications.");
+      });
+  } else {
+    console.log("Notifications permission is already granted.");
+  }
 }
 
 function loadServiceWorker() {
@@ -40,6 +46,16 @@ function loadServiceWorker() {
       navigator.serviceWorker.register("/static/service-worker.js");
     });
   }
+}
+
+function sendTestNotification() {
+  console.log("Sending a test notification...");
+  var notification = new Notification("Pager", {
+    body: "Buzz buzz! Notification test.",
+  });
+  notification.addEventListener("show", function () {
+    console.log("Notification shown.");
+  });
 }
 
 // Setup
@@ -63,7 +79,7 @@ if (window.attachEvent) {
       current_onload(evt);
       setup();
     };
-    window.onload = newonload;
+    window.onload = new_onload;
   } else {
     window.onload = setup;
   }

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, send_from_directory
-import os
+from os.path import join 
 
 app = Flask(__name__)
 
@@ -13,7 +13,7 @@ def index():
 @app.route("/favicon.ico")
 def favicon():
     return send_from_directory(
-        os.path.join(app.root_path, "static"),
+        join(app.root_path, "static"),
         "favicon.ico",
         mimetype="image/vnd.microsoft.icon",
     )
