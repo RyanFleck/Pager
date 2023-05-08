@@ -8,11 +8,14 @@ on the matter which conforms to web standards[^3].
 
 > You don’t need to join the Apple Developer Program to send web push notifications.
 
+To learn about web push, you need to understand [service workers.](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
+
 ### Notes
 
 - Registering a [service worker](https://web.dev/service-workers-registration/)
 - Microsoft article on [push notifications](https://learn.microsoft.com/en-us/microsoft-edge/progressive-web-apps-chromium/how-to/notifications-badges)
 - Article on [push notifications](https://www.educative.io/blog/5-minute-guide-to-push-notifications-in-pwa)
+- Service Worker Cookbook entry on [push clients](https://github.com/mdn/serviceworker-cookbook/blob/master/push-clients/)
 - Served with NGROK
 - Hand drawn favicon :D
 
