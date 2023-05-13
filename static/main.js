@@ -1,4 +1,15 @@
+"use strict";
+
+/*
+  Copyright (c) 2023 Ryan Fleck
+  License provided in LICENSE.txt
+*/
+
 console.log("main.js loaded");
+
+// Global Variables
+var serviceWorkerRegistration;
+// PublicKey available in this file via the flask template. See index.html
 
 // Functions
 
@@ -40,11 +51,19 @@ function enableNotifications() {
   }
 }
 
-function loadServiceWorker() {
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function () {
-      navigator.serviceWorker.register("/static/service-worker.js");
-    });
+function registerServiceWorker() {
+  if ("serviceWorker" in navigator && "PushManager" in window) {
+    console.log("Registering service worker...");
+    navigator.serviceWorker
+      .register("/service-worker.js")
+      .then(function (reg) {
+        serviceWorkerRegistration = reg;
+        console.log("Service worker registered: ", reg);
+      });
+  } else {
+    console.error(
+      "ServiceWorker or PushManager unavailable, failed to register ServiceWorker."
+    );
   }
 }
 
@@ -65,7 +84,7 @@ function setup() {
 
   if (!checkNotificationsAvailable()) return;
   enableNotifications();
-  loadServiceWorker();
+  registerServiceWorker();
 }
 
 // Run 'setup' function on load.
@@ -83,4 +102,21 @@ if (window.attachEvent) {
   } else {
     window.onload = setup;
   }
+}
+
+/** HELPER FUNCTIONS FROM GOOGLE CODELAB */
+
+function urlB64ToUint8Array(base64String) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding)
+    .replace(/\-/g, "+")
+    .replace(/_/g, "/");
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
 }

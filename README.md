@@ -17,7 +17,17 @@ To learn about web push, you need to understand [service workers.](https://devel
 - Article on [push notifications](https://www.educative.io/blog/5-minute-guide-to-push-notifications-in-pwa)
 - Service Worker Cookbook entry on [push clients](https://github.com/mdn/serviceworker-cookbook/blob/master/push-clients/)
 - Served with NGROK
+- Followed [this codelab](https://codelabs.developers.google.com/codelabs/push-notifications#0) tutorial
 - Hand drawn favicon :D
+
+### Development
+
+Something like:
+
+```sh
+pip install flask
+python3 app.py
+```
 
 [^1]: ["Meet Web Push"](https://webkit.org/blog/12945/meet-web-push/)
 
