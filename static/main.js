@@ -36,6 +36,7 @@ function enableNotifications() {
           case "granted":
             console.log("Notifications enabled.");
             sendTestNotification();
+            registerServiceWorker();
             break;
 
           default:
@@ -48,10 +49,12 @@ function enableNotifications() {
       });
   } else {
     console.log("Notifications permission is already granted.");
+    registerServiceWorker();
   }
 }
 
 function registerServiceWorker() {
+  // Sets global variable serviceWorkerRegistration.
   if ("serviceWorker" in navigator && "PushManager" in window) {
     console.log("Registering service worker...");
     navigator.serviceWorker
@@ -59,11 +62,23 @@ function registerServiceWorker() {
       .then(function (reg) {
         serviceWorkerRegistration = reg;
         console.log("Service worker registered: ", reg);
+        subscribeToPushNotifications();
+      })
+      .catch(function (err) {
+        console.error(err);
       });
   } else {
     console.error(
       "ServiceWorker or PushManager unavailable, failed to register ServiceWorker."
     );
+  }
+}
+
+function subscribeToPushNotifications() {
+  // Relies on global variable serviceWorkerRegistration.
+  if (!serviceWorkerRegistration) {
+    console.error("Service worker not set.");
+    return;
   }
 }
 
@@ -77,14 +92,10 @@ function sendTestNotification() {
   });
 }
 
-// Setup
-
 function setup() {
   // Check if notifications are supported, quit early otherwise
-
   if (!checkNotificationsAvailable()) return;
   enableNotifications();
-  registerServiceWorker();
 }
 
 // Run 'setup' function on load.
